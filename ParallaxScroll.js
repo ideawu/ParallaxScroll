@@ -1,5 +1,5 @@
 function ParallaxScroll(dom){
-	ParallaxScroll.debug = false;
+	//ParallaxScroll.debug = true;
 	var self = this;
 	self.dom = $(dom);
 	self.x = 0;

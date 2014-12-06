@@ -63,18 +63,17 @@ var layers = [
 		]
 	},
 	{
-		//width: 639,
-		x: 283,
+		width: 639,
 		"y": 200,
 		"children": [
 			{
 				"img": "car.png",
-				//"x": 283,
+				"x": 283,
 			}
 		]
 	},
 	{
-		width: 639,
+		//width: 639,
 		"children": [
 		   {
 				"img": "text-1.png",
@@ -113,9 +112,6 @@ $('#draw').css('marginTop', 50);
 $('body').height(1500);
 
 
-var scroll = new ParallaxScroll('#draw');
-console.log(scroll.scale, scroll.width, scroll.height);
-
 for(var i in layers){
 	var layer = layers[i];
 	for(var j in layer.children){
@@ -125,7 +121,10 @@ for(var i in layers){
 	}
 }
 
+
+var scroll = new ParallaxScroll('#draw');
 scroll.load(layers);
+console.log(scroll.scale, scroll.width, scroll.height);
 
 
 
