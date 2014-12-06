@@ -1,0 +1,188 @@
+<html>
+<head>
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="Swipe.js"></script>
+	<script type="text/javascript" src="ParallaxScroll.js"></script>
+	<style>
+	body{
+		margin: 0;
+		padding: 0;
+	}
+	</style>
+</head>
+<body>
+
+<div id="draw" style="position: relative; margin: 0 auto; width: 100%;
+	overflow: hidden; background: #eee;">
+</div>
+
+
+<script type="text/javascript">
+var layers = [
+	{
+		"children": [
+			{
+				x: 0,
+				y: 0,
+				width: 639,
+				height: '100%',
+				css: {
+					backgroundColor: '#f7be4d'
+				}
+			},
+			{
+				"img": "road.png",
+				"x": 270,
+				"height": "100%",
+				"css": {
+					"backgroundRepeat": "repeat-y"
+				}
+			},
+			{
+				"img": "lupai-1.png",
+				"x": 370,
+				"y": 100
+			},
+			{
+				"img": "pic-1.png",
+				"x": 12,
+				"y": 200
+			},
+			{
+				"img": "lupai-2.png",
+				"x": 370,
+				"y": 500
+			},
+			{
+				"img": "lupai-3.png",
+				"x": 170,
+				"y": 800
+			},
+			{
+				"img": "lupai-4.png",
+				"x": 380,
+				"y": 1200
+			},
+			{
+				y: 1500
+			}
+		]
+	},
+	{
+		"children": [
+			{
+				"img": "car.png",
+				"x": 283,
+				"y": 200,
+			}
+		]
+	},
+	{
+		"children": [
+		   {
+				"img": "text-1.png",
+				"x": 86,
+				"y": 446
+			},
+			{
+				"img": "text-2.png",
+				"x": 86,
+				"y": 913
+			},
+			{
+				"img": "btn_earn_hover.png",
+				"x": 210,
+				"y": 1413
+			},
+			{
+				html: '<a href="https://lantouzi.com/" style="display:block;width:100%;height:100%">&nbsp;</a>',
+				"x": 210,
+				"y": 1420,
+				width: 238,
+				height: 78
+			},
+		]
+	}
+];
+
+
+
+//delete layers[0];
+//delete layers[2];
+
+$('#draw').height($(document).height() * 0.8);
+$('#draw').width($('#draw').height() * 0.7);
+$('#draw').css({
+	border: '3px solid #f00',
+	overflow: 'visible',
+	marginTop: 50
+});
+$('body').height(2000);
+
+
+var scroll = new ParallaxScroll('#draw');
+console.log(scroll.scale, scroll.width, scroll.height);
+
+for(var i in layers){
+	var layer = layers[i];
+	for(var j in layer.children){
+		if(layer.children[j].img){
+			layer.children[j].img = './imgs/' + layer.children[j].img;
+		}
+	}
+}
+
+scroll.load(layers);
+
+
+
+
+function move(dx, dy){
+	dy = scroll.move(dx, dy);
+}
+
+
+function keyboard_handler(e){
+	var c = String.fromCharCode(e.which);
+	switch(c){
+		case '&': //up
+			move(0, +173);
+			if(e.preventDefault) e.preventDefault();
+			break;
+		case '(': //down
+			move(0, -173);
+			if(e.preventDefault) e.preventDefault();
+			break;
+		case '%': // left
+			move(-173, 0);
+			if(e.preventDefault) e.preventDefault();
+			break;
+		case ' ':
+		case '\'': // right
+			move(+173, 0);
+			if(e.preventDefault) e.preventDefault();
+			break;
+		default:
+			break;
+	}
+}
+$(document).bind('keydown', keyboard_handler);
+
+
+var swipe = new Swipe($('#draw'));
+swipe.onswipe = function(e){
+	e.preventDefault();
+	move(e.dx, e.dy);
+}
+
+$(document).on('touchstart', function(event) {
+	//event.preventDefault();
+});
+
+
+
+</script>
+
+
+</body>
+</html>
