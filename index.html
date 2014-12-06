@@ -8,6 +8,7 @@
 		margin: 0;
 		padding: 0;
 	}
+	a{text-decoration: none;}
 	</style>
 </head>
 <body>
@@ -20,16 +21,12 @@
 <script type="text/javascript">
 var layers = [
 	{
+		width: 639,
+		height: 2980,
+		css: {
+			backgroundColor: '#f7be4d'
+		},
 		"children": [
-			{
-				x: 0,
-				y: 0,
-				width: 639,
-				height: '100%',
-				css: {
-					backgroundColor: '#f7be4d'
-				}
-			},
 			{
 				"img": "road.png",
 				"x": 270,
@@ -63,21 +60,21 @@ var layers = [
 				"x": 380,
 				"y": 1200
 			},
-			{
-				y: 2980
-			}
 		]
 	},
 	{
+		//width: 639,
+		x: 283,
+		"y": 200,
 		"children": [
 			{
 				"img": "car.png",
-				"x": 283,
-				"y": 200,
+				//"x": 283,
 			}
 		]
 	},
 	{
+		width: 639,
 		"children": [
 		   {
 				"img": "text-1.png",
@@ -112,12 +109,8 @@ var layers = [
 
 $('#draw').height($(document).height() * 0.8);
 $('#draw').width($('#draw').height() * 0.7);
-$('#draw').css({
-	border: '3px solid #f00',
-	overflow: 'visible',
-	marginTop: 50
-});
-$('body').height(2000);
+$('#draw').css('marginTop', 50);
+$('body').height(1500);
 
 
 var scroll = new ParallaxScroll('#draw');

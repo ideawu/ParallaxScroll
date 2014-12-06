@@ -1,4 +1,5 @@
 function ParallaxScroll(dom){
+	ParallaxScroll.debug = false;
 	var self = this;
 	self.dom = $(dom);
 	self.x = 0;
@@ -12,6 +13,13 @@ function ParallaxScroll(dom){
 
 	self.layers = [];
 	
+	if(ParallaxScroll.debug){
+		self.dom.css({
+			border: '3px solid #f00',
+			overflow: 'visible'
+		});
+	}
+	
 	self.load = function(confs){
 		for(var i in confs){
 			var layer = new Layer(self);
@@ -22,7 +30,6 @@ function ParallaxScroll(dom){
 		self.render();
 	}
 	
-	// 实现 Sprite 接口
 	self.render = function(){
 		for(var i in self.layers){
 			var layer = self.layers[i];
@@ -34,37 +41,44 @@ function ParallaxScroll(dom){
 	
 	self.move = function(dx, dy){
 		var y = self.y + dy;
-		if(y > 0){
-			y = 0;
-		}
-		if(y < -self.height){
-			y = -self.height;
-		}
+		y = Math.min(y, 0);
+		y = Math.max(y, -self.height);
 		dy = y - self.y;
 
 		var x = self.x + dx;
-		if(x > 0){
-			x = 0;
-		}
-		if(x < -self.width){
-			x = -self.width;
-		}
+		x = Math.min(x, 0);
+		x = Math.max(x, -self.width);
 		dx = x - self.x;
 		
-		//dx = parseInt(dx);
-		//dy = parseInt(dy);
+		dx = parseInt(dx);
+		dy = parseInt(dy);
+		
+		for(var i in self.layers){
+			var layer = self.layers[i];
+			if(layer.x == 0 && layer.x + layer.width == self.width){
+				dx = 0;
+			}
+			if(layer.y == 0 && layer.y + layer.height == self.height){
+				dy = 0;
+			}
+		}
+		if(!dx && !dy){
+			return;
+		}
+		
 		self.x += dx;
 		self.y += dy;
 		var dx_rate = self.x / self.width;
 		var dy_rate = self.y / self.height;
-		console.log(self.y, self.height, self.max_height);
-		
+				
 		for(var i in self.layers){
 			var layer = self.layers[i];
 			
-			var new_y = dy_rate * (layer.height - self.height);
+			// virtual height: self.height + layer.originY
+			var new_y = layer.originY + dy_rate * (layer.height - self.height + layer.originY);
+			//var new_y = dy_rate * (layer.height - layer.originY - self.height);
 			var my = new_y - layer.y;
-			var new_x = dx_rate * (layer.width - self.width);
+			var new_x = layer.originX + dx_rate * (layer.width - self.width + layer.originX);
 			var mx = new_x - layer.x;
 			//mx = 0;
 			mx = parseInt(mx);
@@ -72,7 +86,7 @@ function ParallaxScroll(dom){
 			layer.move(mx, my);
 			console.log('layer#' + i, layer.str(), ' move(' + mx + ',' + my + ')');
 		}
-		//self.render();
+		self.render();
 	}
 	
 	function Layer(scroll){
@@ -92,28 +106,33 @@ function ParallaxScroll(dom){
 		}
 
 		self.load = function(conf){
-			self.x = 0;
-			self.y = 0;
-			self.width = 0;
-			self.height = 0;
+			self.x = (conf.x || 0) * ParallaxScroll.scale;
+			self.y = (conf.y || 0) * ParallaxScroll.scale;
+			self.width = (conf.width || 0) * ParallaxScroll.scale;
+			self.height = (conf.height || 0) * ParallaxScroll.scale;
+			self.originX = self.x;
+			self.originY = self.y;
 
 			for(var i in conf.children){
 				var sprite = new Sprite();
 				sprite.load(conf.children[i]);
 				self.addSprite(sprite);
 			}
-
+			
 			self.layout();
 			
 			self.dom.css({
-				border: '1px solid #00f',
-				//width: '100%',
-				background: '#000',
-				opacity: 0.5,
 				position: 'absolute',
 				top: self.y,
 				left: self.x
 			});
+			if(ParallaxScroll.debug){ // debug
+				self.dom.css({
+					border: '1px solid #00f',
+					background: '#000',
+					opacity: 0.5,
+				});
+			}
 			if(conf.css){
 				self.dom.css(conf.css);
 			}
@@ -198,6 +217,7 @@ function ParallaxScroll(dom){
 			
 			if(self.html){
 				//console.log(self.html);
+				//console.log($(self.html).width(), $(self.html).height());
 				self.dom.append($(self.html));
 			}
 			
@@ -255,6 +275,7 @@ function ParallaxScroll(dom){
 		self.visible = function(width, height){
 			var y = self.y + self.layer.y;
 			if(y + self.height < 0 - 0 || y > height + 0){
+				//console.log(self.img, self.y, self.height);
 				return false;
 			}
 			return true;
