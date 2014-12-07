@@ -166,8 +166,16 @@ swipe.onswipe = function(e){
 	e.preventDefault();
 	move(e.dx, e.dy);
 }
+swipe.onend = function(e){
+	//console.log(e.dx, e.dy);
+}
 
 $(document).on('touchstart', function(event) {
+	//alert(1);
+	//event.preventDefault();
+});
+$(document).on('mousedown', function(event) {
+	//alert(2);
 	//event.preventDefault();
 });
 

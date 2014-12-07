@@ -3,35 +3,71 @@
  * @link: http://www.ideawu.com/
  * simulate swipe event
  */
-var Swipe = function(jqobj){
+var Swipe = function(dom){
 	var s = this;
 	var self = this;
-	self.jqobj = jqobj;
+	self.dom = dom;
+	self.onstart = null;
+	self.onswipe = null;
+	self.onend = null;
+	self.status = null;
+	self.event = {dx:0, dy:0, preventDefault: function(){}};
+	
+	self.last_pos = {x: 0, y: 0};
+	
+	self.mousemove = function(e){
+		//console.log(e);
+		e.preventDefault();
+		var oe = e.originalEvent;
+		e.pageX = oe.pageX;
+		e.pageY = oe.pageY;
+		e.clientX = oe.clientX;
+		e.clientY = oe.clientY;
+
+		var pos = {x: e.pageX, y: e.pageY};
+		e.dx = pos.x - self.last_pos.x;
+		e.dy = pos.y - self.last_pos.y;
+		self.last_pos = pos;
+
+		e.dx = isNaN(e.dx)? 0 : e.dx;
+		e.dy = isNaN(e.dy)? 0 : e.dy;
+		if(e.dx == 0 && e.dy == 0){
+			return;
+		}
+
+		if(e.type == 'touchmove'){
+			// iOS fix
+			e.originalEvent = e;
+			e.preventDefault = function(){};
+		}
+		s.trigger(e);
+	}
 
 	self.listen = function(){
-		self.jqobj.bind('mousewheel DOMMouseScroll', function(e){
+		self.dom.bind('mousewheel DOMMouseScroll', function(e){
 			self.trigger(e);
 		});
-	}
-	
-	self.cancel = function(){
-		self.jqobj.unbind('mousewheel DOMMouseScroll');
-		//self.jqobj.bind('mousewheel DOMMouseScroll', function(e){e.preventDefault();});
-		if(s.timer != null){
-			clearTimeout(s.timer);
-		}
+		self.dom.on('dragstart', function(e){e.preventDefault();});
+		self.dom.bind('mousedown touchstart', function(e){
+			self.last_pos = {x: e.pageX, y: e.pageY};
+			self.dom.bind('mousemove touchmove', self.mousemove);
+			self.dom.bind('mouseup mouseleave touchend', function(e){
+				if(e.type == 'mouseleave'){
+					var offset = self.dom.offset();
+					if(e.pageX > offset.left && e.pageX < offset.left + self.dom.width()
+						&& e.pageY > offset.top && e.pageY < offset.top + self.dom.height()){
+						return;
+					}
+				}
+				self.dom.unbind('mousemove touchmove', self.mousemove);
+				self.dom.unbind('mouseup mouseleave touchend');
+			});
+		});
 	}
 	
 	self.listen();
 
-	s.status = null;
-	s.event = {dx:0, dy:0};
-	s.timer = null;
-
-	s.onstart = null;
-	s.onswipe = null;
-	s.onend = null;
-
+	self.timer = null;
 	function settimer(){
 		if(s.timer != null){
 			clearTimeout(s.timer);
@@ -40,26 +76,22 @@ var Swipe = function(jqobj){
 			s.status = null;
 			clearTimeout(s.timer);
 			if(s.onend != null){
+				s.event = {dx:0, dy:0, preventDefault: function(){}};
 				s.onend(s.event);
-				s.event = {dx:0, dy:0};
 			}
 		}, 150);
 	}
+
 	// be called on mousewheel event
 	s.trigger = function(e){
-		var oe = e.originalEvent;
-		// for firefox use originalEvent
-		e.pageX = oe.pageX;
-		e.pageY = oe.pageY;
-		e.clientX = oe.clientX;
-		e.clientY = oe.clientY;
-		//
-		e.dx = oe.wheelDeltaX || 0;
-		e.dy =  oe.wheelDelta || oe.wheelDeltaY ||-oe.detail * 40;
-
-		if(oe.wheelDeltaX != undefined){ // trackpad
-			//e.dx *= 1;
-			//e.dy *= 1;
+		if(e.type == 'mousewheel' || e.type == 'DOMMouseScroll'){
+			var oe = e.originalEvent;
+			e.pageX = oe.pageX;
+			e.pageY = oe.pageY;
+			e.clientX = oe.clientX;
+			e.clientY = oe.clientY;
+			e.dx = oe.wheelDeltaX || 0;
+			e.dy =  oe.wheelDelta || oe.wheelDeltaY || -oe.detail * 40;
 		}
 
 		s.event = e;

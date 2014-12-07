@@ -86,7 +86,7 @@ function ParallaxScroll(dom){
 			mx = parseInt(mx);
 			my = parseInt(my);
 			layer.move(mx, my);
-			console.log('layer#' + i, layer.str(), ' move(' + mx + ',' + my + ')');
+			//console.log('layer#' + i, layer.str(), ' move(' + mx + ',' + my + ')');
 		}
 		self.render();
 	}
@@ -132,7 +132,7 @@ function ParallaxScroll(dom){
 				self.dom.css({
 					border: '1px solid #00f',
 					background: '#000',
-					opacity: 0.5,
+					opacity: 0.5
 				});
 			}
 			if(conf.css){
