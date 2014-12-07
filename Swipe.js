@@ -1,7 +1,7 @@
 /**
  * @author: ideawu
  * @link: http://www.ideawu.com/
- * simulate swipe event
+ * Mobile browser swipe event. Treats PC mouse scroll as swipe.
  */
 var Swipe = function(dom){
 	var s = this;
