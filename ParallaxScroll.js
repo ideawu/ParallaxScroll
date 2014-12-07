@@ -4,8 +4,8 @@ function ParallaxScroll(dom){
 	self.dom = $(dom);
 	self.x = 0;
 	self.y = 0;
-	self.width = parseInt($(dom).width());
-	self.height = parseInt($(dom).height());
+	self.width = Math.round($(dom).width());
+	self.height = Math.round($(dom).height());
 	self.max_width = self.width;
 	self.max_height = self.height;
 	self.scale = self.width / 639;
@@ -83,8 +83,8 @@ function ParallaxScroll(dom){
 			var new_x = layer.originX + dx_rate * (layer.width - self.width + layer.originX);
 			var mx = new_x - layer.x;
 			//mx = 0;
-			mx = parseInt(mx);
-			my = parseInt(my);
+			mx = Math.round(mx);
+			my = Math.round(my);
 			layer.move(mx, my);
 			//console.log('layer#' + i, layer.str(), ' move(' + mx + ',' + my + ')');
 		}
@@ -161,8 +161,8 @@ function ParallaxScroll(dom){
 				self.width = Math.max(self.width, sprite.x + sprite.width);
 				self.height = Math.max(self.height, sprite.y + sprite.height);
 			}
-			self.width = parseInt(self.width);
-			self.height = parseInt(self.height);
+			self.width = Math.round(self.width);
+			self.height = Math.round(self.height);
 			self.dom.height(self.height);
 		}
 		
@@ -212,10 +212,10 @@ function ParallaxScroll(dom){
 			self.width = conf.width || 0;
 			self.height = conf.height || 0;
 			
-			self.x = parseInt(self.x);
-			self.y = parseInt(self.y);
-			self.width = parseInt(self.width);
-			self.height = parseInt(self.height);
+			self.x = Math.round(self.x);
+			self.y = Math.round(self.y);
+			self.width = Math.round(self.width);
+			self.height = Math.round(self.height);
 			
 			if(self.html){
 				//console.log(self.html);
@@ -256,8 +256,8 @@ function ParallaxScroll(dom){
 			if(self.img){
 				var url = self.img;
 				load_image(url, function(img){
-					img.width *= ParallaxScroll.scale;
-					img.height *= ParallaxScroll.scale;
+					img.width = Math.round(img.width * ParallaxScroll.scale);
+					img.height = Math.round(img.height * ParallaxScroll.scale);
 					self.width = img.width;
 					self.height = img.height;
 					//console.log(img.width, img.height, img.src);

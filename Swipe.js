@@ -44,11 +44,14 @@ var Swipe = function(dom){
 	}
 
 	self.listen = function(){
-		self.dom.bind('mousewheel DOMMouseScroll', function(e){
+		self.dom.bind('mousewheel DOMMouseScroll MozMousePixelScroll', function(e){
+			e.preventDefault();
 			self.trigger(e);
 		});
+		
 		self.dom.on('dragstart', function(e){e.preventDefault();});
 		self.dom.bind('mousedown touchstart', function(e){
+			e.preventDefault();
 			self.last_pos = {x: e.pageX, y: e.pageY};
 			self.dom.bind('mousemove touchmove', self.mousemove);
 			self.dom.bind('mouseup mouseleave touchend', function(e){
@@ -84,7 +87,7 @@ var Swipe = function(dom){
 
 	// be called on mousewheel event
 	s.trigger = function(e){
-		if(e.type == 'mousewheel' || e.type == 'DOMMouseScroll'){
+		if(e.type == 'mousewheel' || e.type == 'DOMMouseScroll' || e.type == 'MozMousePixelScroll'){
 			var oe = e.originalEvent;
 			e.pageX = oe.pageX;
 			e.pageY = oe.pageY;
