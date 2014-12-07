@@ -149,7 +149,8 @@ function ParallaxScroll(dom, scale){
 			
 			var dist = Math.sqrt(dx * dx + dy * dy);
 			var dist2 = Math.sqrt(self.width * self.width + self.height * self.height);
-			var delay = 2000 * dist / dist2;
+			var delay = 2000 * dist / dist2 + 50;
+			//console.log(delay);
 
 			self.dom.queue('fx', []).stop().animate({
 				left: self.x,

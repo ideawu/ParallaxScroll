@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<div id="draw" style="position: relative; margin: 0 auto; width: 100%;
+<div id="draw" style="position: relative; margin: 50px auto; width: 640px; height: 240px;
 	overflow: hidden; background: #eee;">
 </div>
 
@@ -55,14 +55,6 @@ var layers = [
 	}
 ];
 
-
-
-//delete layers[0];
-//delete layers[2];
-
-$('#draw').height(240);
-$('#draw').width(640);
-$('#draw').css('marginTop', 50);
 
 for(var i in layers){
 	var layer = layers[i];
