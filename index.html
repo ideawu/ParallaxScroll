@@ -123,7 +123,7 @@ for(var i in layers){
 }
 
 
-var scroll = new ParallaxScroll('#draw');
+var scroll = new ParallaxScroll('#draw', $('#draw').width() / 639);
 scroll.load(layers);
 console.log(scroll.scale, scroll.width, scroll.height);
 
@@ -166,9 +166,6 @@ var swipe = new Swipe($('#draw'));
 swipe.onswipe = function(e){
 	e.preventDefault();
 	move(e.dx, e.dy);
-}
-swipe.onend = function(e){
-	//console.log(e.dx, e.dy);
 }
 
 $(document).on('touchstart', function(event) {

@@ -1,4 +1,4 @@
-function ParallaxScroll(dom){
+function ParallaxScroll(dom, scale){
 	//ParallaxScroll.debug = true;
 	var self = this;
 	self.dom = $(dom);
@@ -8,7 +8,7 @@ function ParallaxScroll(dom){
 	self.height = Math.round($(dom).height());
 	self.max_width = self.width;
 	self.max_height = self.height;
-	self.scale = self.width / 639;
+	self.scale = scale || 1;
 	ParallaxScroll.scale = self.scale;
 
 	self.layers = [];
@@ -269,7 +269,7 @@ function ParallaxScroll(dom){
 						height: self.height
 					});
 					
-					self.layer.render();
+					self.layer.scroll.render();
 				});
 			}
 		}

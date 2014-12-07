@@ -1,0 +1,111 @@
+<html>
+<head>
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="Swipe.js"></script>
+	<script type="text/javascript" src="ParallaxScroll.js"></script>
+	<style>
+	body{
+		margin: 0;
+		padding: 0;
+	}
+	a{text-decoration: none;}
+	</style>
+</head>
+<body>
+
+<div id="draw" style="position: relative; margin: 0 auto; width: 100%;
+	overflow: hidden; background: #eee;">
+</div>
+
+<p style="text-align: center;">images stealed from <a href="http://stephband.info/jparallax/">http://stephband.info/jparallax/</a></p>
+
+
+<script type="text/javascript">
+var layers = [
+	{
+		//height: 288,
+		width: 920,
+		"children": [
+			{
+				"img": "1_mountains.png"
+			},
+			{
+				y: 300
+			}
+		]
+	},
+	{
+		//height: 288,
+		width: 1100,
+		"children": [
+			{
+				y: 50,
+				"img": "2_hill.png"
+			}
+		]
+	},
+	{
+		width: 1136,
+		"children": [
+			{
+				y: 80,
+				"img": "3_wood.png"
+			}
+		]
+	}
+];
+
+
+
+//delete layers[0];
+//delete layers[2];
+
+$('#draw').height(240);
+$('#draw').width(640);
+$('#draw').css('marginTop', 50);
+
+for(var i in layers){
+	var layer = layers[i];
+	for(var j in layer.children){
+		if(layer.children[j].img){
+			layer.children[j].img = './imgs/stephband.info/' + layer.children[j].img;
+		}
+	}
+}
+
+
+var scroll = new ParallaxScroll('#draw');
+scroll.load(layers);
+scroll.move(-scroll.max_width/2, 0);
+console.log(scroll.scale, scroll.width, scroll.height);
+
+function move(dx, dy){
+	dy = scroll.move(dx, dy);
+}
+
+$('#draw').on('mousemove', function(e){
+	var ox = e.pageX - $('#draw').offset().left;
+	var oy = e.pageY - $('#draw').offset().top;
+	if(oy < scroll.height * 0.2){
+		oy = 0;
+	}
+	if(oy > scroll.height * 0.6){
+		oy = scroll.height * 0.6;
+	}
+	var dx = -ox - scroll.x;
+	var dy = -oy - scroll.y;
+	scroll.move(dx, dy);
+});
+var swipe = new Swipe($('#draw'));
+swipe.onswipe = function(e){
+	e.preventDefault();
+	move(e.dx, e.dy);
+}
+
+
+
+</script>
+
+
+</body>
+</html>
