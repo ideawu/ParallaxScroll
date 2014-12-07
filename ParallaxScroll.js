@@ -146,11 +146,15 @@ function ParallaxScroll(dom, scale){
 			}
 			self.x += dx;
 			self.y += dy;
+			
+			var dist = Math.sqrt(dx * dx + dy * dy);
+			var dist2 = Math.sqrt(self.width * self.width + self.height * self.height);
+			var delay = 2000 * dist / dist2;
 
 			self.dom.queue('fx', []).stop().animate({
 				left: self.x,
 				top: self.y
-			}, 300);
+			}, delay);
 		}
 		
 		self.layout = function(){
