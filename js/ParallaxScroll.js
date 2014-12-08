@@ -240,6 +240,9 @@ function ParallaxScroll(dom, scale){
 				//console.log($(self.html).width(), $(self.html).height());
 				self.dom.append($(self.html));
 			}
+			if(self.img){
+				self.dom.css('backgroundImage', 'url(' + self.img + ')');
+			}
 			
 			self.dom.css({
 				position: 'absolute',
@@ -281,7 +284,7 @@ function ParallaxScroll(dom, scale){
 					//console.log(img.width, img.height, img.src);
 					self.dom.css({
 						opacity: 0,
-						backgroundImage: 'url(' + img.src + ')',
+						//backgroundImage: 'url(' + img.src + ')',
 						backgroundSize: self.width + 'px ' + self.height + 'px',
 						width: self.width,
 						height: self.height
@@ -295,7 +298,7 @@ function ParallaxScroll(dom, scale){
 		
 		self.visible = function(width, height){
 			var y = self.y + self.layer.y;
-			if(y + self.height < 0 - 0 || y > height + 0){
+			if(y + self.height < 0 - 20 || y > height + 20){
 				//console.log(self.img, self.y, self.height);
 				return false;
 			}
