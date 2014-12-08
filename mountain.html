@@ -71,10 +71,6 @@ scroll.load(layers);
 scroll.move(-scroll.max_width/2, 0);
 console.log(scroll.scale, scroll.width, scroll.height);
 
-function move(dx, dy){
-	dy = scroll.move(dx, dy);
-}
-
 $('#draw').on('mousemove', function(e){
 	var ox = e.pageX - $('#draw').offset().left;
 	var oy = e.pageY - $('#draw').offset().top;
@@ -91,7 +87,7 @@ $('#draw').on('mousemove', function(e){
 var swipe = new Swipe($('#draw'));
 swipe.onswipe = function(e){
 	e.preventDefault();
-	move(e.dx, e.dy);
+	scroll.move(e.dx, e.dy);
 }
 
 

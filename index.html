@@ -128,31 +128,24 @@ scroll.load(layers);
 console.log(scroll.scale, scroll.width, scroll.height);
 
 
-
-
-function move(dx, dy){
-	dy = scroll.move(dx, dy);
-}
-
-
 function keyboard_handler(e){
 	var c = String.fromCharCode(e.which);
 	switch(c){
 		case '&': //up
-			move(0, +173);
+			move(0, +73);
 			if(e.preventDefault) e.preventDefault();
 			break;
 		case '(': //down
-			move(0, -173);
+			move(0, -73);
 			if(e.preventDefault) e.preventDefault();
 			break;
 		case '%': // left
-			move(-173, 0);
+			move(-73, 0);
 			if(e.preventDefault) e.preventDefault();
 			break;
 		case ' ':
 		case '\'': // right
-			move(+173, 0);
+			move(+73, 0);
 			if(e.preventDefault) e.preventDefault();
 			break;
 		default:
@@ -165,17 +158,8 @@ $(document).bind('keydown', keyboard_handler);
 var swipe = new Swipe($('#draw'));
 swipe.onswipe = function(e){
 	e.preventDefault();
-	move(e.dx, e.dy);
+	scroll.move(e.dx, e.dy);
 }
-
-$(document).on('touchstart', function(event) {
-	//alert(1);
-	//event.preventDefault();
-});
-$(document).on('mousedown', function(event) {
-	//alert(2);
-	//event.preventDefault();
-});
 
 
 </script>

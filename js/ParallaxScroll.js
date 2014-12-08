@@ -45,8 +45,6 @@ function ParallaxScroll(dom, scale){
 	}
 	
 	self.move = function(dx, dy){
-		dx = dx / self.max_width * self.width;
-		dy = dy / self.max_height * self.height;
 		dx = Math.ceil(dx);
 		dy = Math.ceil(dy);
 
