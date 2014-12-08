@@ -1,6 +1,6 @@
 /**
  * @author: ideawu
- * @link: http://www.ideawu.com/
+ * @link: https://github.com/ideawu/ParallaxScroll
  * Mobile browser swipe event. Treats PC mouse scroll as swipe.
  */
 var Swipe = function(dom){

@@ -1,3 +1,8 @@
+/**
+ * @author: ideawu
+ * @link: https://github.com/ideawu/ParallaxScroll
+ * Parallax Scrolling widget.
+ */
 function ParallaxScroll(dom, scale){
 	//ParallaxScroll.debug = true;
 	var self = this;
