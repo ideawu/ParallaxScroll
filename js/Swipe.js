@@ -18,7 +18,7 @@ var Swipe = function(dom){
 	self.mousemove = function(e){
 		//console.log(e);
 		e.preventDefault();
-		var oe = e.originalEvent;
+		var oe = e.originalEvent || e;
 		e.pageX = oe.pageX;
 		e.pageY = oe.pageY;
 		e.clientX = oe.clientX;
@@ -88,7 +88,7 @@ var Swipe = function(dom){
 	// be called on mousewheel event
 	s.trigger = function(e){
 		if(e.type == 'mousewheel' || e.type == 'DOMMouseScroll' || e.type == 'MozMousePixelScroll'){
-			var oe = e.originalEvent;
+			var oe = e.originalEvent || e;
 			e.pageX = oe.pageX;
 			e.pageY = oe.pageY;
 			e.clientX = oe.clientX;

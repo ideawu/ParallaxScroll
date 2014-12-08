@@ -158,15 +158,16 @@ function ParallaxScroll(dom, scale){
 				var delay = 0;
 			}else{
 				var full_delay = 1100 * scroll_dist / 100;
-				console.log(full_delay);
+				//console.log(full_delay);
 				var delay = full_delay * dist / dist2 + 10;
 			}
 			//console.log(delay, self.width, self.height);
 
-			self.dom.queue('fx', []).stop().animate({
+			//self.dom.queue('fx', []).stop().animate({
+			self.dom.animate({
 				left: self.x,
 				top: self.y
-			}, delay);
+			}, delay, 'ease');
 		}
 		
 		self.layout = function(){
@@ -306,13 +307,15 @@ function ParallaxScroll(dom, scale){
 		}
 		
 		self.show = function(){
-			self.dom.queue('fx', []).delay(400).stop().animate({
+			//self.dom.queue('fx', []).delay(400).stop().animate({
+			self.dom.animate({
 				opacity: 1
 			}, 500);
 		}
 		
 		self.hide = function(){
-			self.dom.queue('fx', []).delay(400).stop().animate({
+			//self.dom.queue('fx', []).delay(400).stop().animate({
+			self.dom.animate({
 				opacity: 0
 			}, 500);
 		}

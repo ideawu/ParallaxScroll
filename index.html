@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Parallax Scroll Demo - BYD car</title>
-	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="js/zepto.min.js"></script>
 	<script type="text/javascript" src="js/Swipe.js"></script>
 	<script type="text/javascript" src="js/ParallaxScroll.js"></script>
 	<style>
@@ -112,7 +112,7 @@ var layers = [
 //delete layers[0];
 //delete layers[2];
 
-$('#draw').height($(document).height() * 0.8);
+$('#draw').height($(window).height() * 0.8);
 $('#draw').width($('#draw').height() * 0.7);
 $('#draw').css('marginTop', 50);
 $('body').height(1500);
