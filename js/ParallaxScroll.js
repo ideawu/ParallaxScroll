@@ -286,8 +286,9 @@ function ParallaxScroll(dom, scale){
 						width: self.width,
 						height: self.height
 					});
-					
-					self.layer.scroll.render();
+					self.render();
+					//self.layer.layout();
+					//self.layer.scroll.render();
 				});
 			}
 		}
