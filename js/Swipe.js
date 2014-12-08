@@ -94,7 +94,7 @@ var Swipe = function(dom){
 			e.clientX = oe.clientX;
 			e.clientY = oe.clientY;
 			e.dx = oe.wheelDeltaX || 0;
-			e.dy = (oe.wheelDelta || oe.wheelDeltaY || -oe.detail * 40)/17;
+			e.dy = (oe.wheelDelta || oe.wheelDeltaY || -oe.detail * 40)/13;
 		}
 
 		s.event = e;

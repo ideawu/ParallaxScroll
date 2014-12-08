@@ -97,7 +97,7 @@ function ParallaxScroll(dom, scale){
 	function Layer(scroll){
 		var self = this;
 		self.scroll = scroll;
-		self.dom = $('<div></div>');
+		self.dom = $('<div class="Layer"></div>');
 		self.sprites = [];
 		
 		self.str = function(){
@@ -153,8 +153,15 @@ function ParallaxScroll(dom, scale){
 			
 			var dist = Math.sqrt(dx * dx + dy * dy);
 			var dist2 = Math.sqrt(self.width * self.width + self.height * self.height);
-			var delay = 2000 * dist / dist2 + 50;
-			//console.log(delay);
+			var scroll_dist = Math.sqrt(self.scroll.width * self.scroll.width + self.scroll.height * self.scroll.height);
+			if(dist2 == 0){
+				var delay = 0;
+			}else{
+				var full_delay = 1100 * scroll_dist / 100;
+				console.log(full_delay);
+				var delay = full_delay * dist / dist2 + 10;
+			}
+			//console.log(delay, self.width, self.height);
 
 			self.dom.queue('fx', []).stop().animate({
 				left: self.x,
@@ -191,7 +198,7 @@ function ParallaxScroll(dom, scale){
 	function Sprite(conf){
 		var self = this;
 		self.layer = null;
-		self.dom = $('<div></div>');
+		self.dom = $('<div class="Sprite"></div>');
 		
 		self.str = function(){
 			return [self.x, self.y, self.width, self.height].join(',');
