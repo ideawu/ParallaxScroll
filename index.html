@@ -138,20 +138,20 @@ function keyboard_handler(e){
 	var c = String.fromCharCode(e.which);
 	switch(c){
 		case '&': //up
-			move(0, +73);
+			scroll.move(0, +73);
 			if(e.preventDefault) e.preventDefault();
 			break;
 		case '(': //down
-			move(0, -73);
+			scroll.move(0, -73);
 			if(e.preventDefault) e.preventDefault();
 			break;
 		case '%': // left
-			move(-73, 0);
+			scroll.move(-73, 0);
 			if(e.preventDefault) e.preventDefault();
 			break;
 		case ' ':
 		case '\'': // right
-			move(+73, 0);
+			scroll.move(+73, 0);
 			if(e.preventDefault) e.preventDefault();
 			break;
 		default:

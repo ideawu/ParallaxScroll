@@ -117,6 +117,7 @@ function ParallaxScroll(dom, scale){
 			self.height = (conf.height || 0) * ParallaxScroll.scale;
 			self.originX = self.x;
 			self.originY = self.y;
+			self.originWidth = conf.width;
 
 			for(var i in conf.children){
 				var sprite = new Sprite();
@@ -176,7 +177,9 @@ function ParallaxScroll(dom, scale){
 		
 		self.render = function(){
 			self.layout();
-			self.dom.width(self.width);
+			if(self.originWidth){
+				self.dom.width(self.width);
+			}
 			
 			for(var i in self.sprites){
 				var sprite = self.sprites[i];
