@@ -278,10 +278,9 @@ function ParallaxScroll(dom, scale){
 			if(self.img){
 				var url = self.img;
 				load_image(url, function(img){
-					var h = img.height * ParallaxScroll.scale;
 					img.width = Math.floor(img.width * ParallaxScroll.scale);
 					img.height = Math.floor(img.height * ParallaxScroll.scale);
-						self.width = img.width;
+					self.width = img.width;
 					self.height = img.height;
 					//console.log(img.width, img.height, img.src);
 					self.dom.css({
