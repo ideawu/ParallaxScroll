@@ -69,7 +69,7 @@ var Guesture = function(dom){
 		
 		function Linear(steps){
 			var min = 1000 / 100;
-			var max = 1000 / 60;
+			var max = 1000 / 50;
 			var delta = (max - min) / steps;
 			var delay = min;
 			this.delay = function(){
@@ -178,8 +178,8 @@ var Guesture = function(dom){
 	}
 
 	self.do_swipe = function(r){
-		r.dx *= 3;
-		r.dy *= 3;
+		r.dx *= 7;
+		r.dy *= 7;
 		if(Math.abs(r.dx) < 1 && Math.abs(r.dy) < 1){
 			return;
 		}

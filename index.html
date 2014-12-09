@@ -122,7 +122,14 @@ layers[1].width += 100;
 for(var i in layers){
 	var layer = layers[i];
 	for(var j in layer.children){
+		if(layer.y){
+			layer.y *= 3;
+		}
+		if(layer.height){
+			//layer.height *= 3;
+		}
 		if(layer.children[j].img){
+			layer.children[j].y *= 3;
 			layer.children[j].img = './imgs/' + layer.children[j].img;
 		}
 	}
@@ -170,6 +177,7 @@ swipe.onswipe = function(e){
 */
 var guesture = new Guesture('#draw');
 guesture.onmove = function(e){
+	//console.log(e.dx, e.dy);
 	scroll.move(e.dx, e.dy);
 }
 
