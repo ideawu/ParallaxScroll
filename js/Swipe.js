@@ -6,7 +6,7 @@
 var Swipe = function(dom){
 	var s = this;
 	var self = this;
-	self.dom = dom;
+	self.dom = $(dom);
 	self.onstart = null;
 	self.onswipe = null;
 	self.onend = null;

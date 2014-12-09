@@ -4,7 +4,6 @@
 	<meta charset="UTF-8" />
 	<title>Parallax Scroll Demo - moutain view</title>
 	<script type="text/javascript" src="js/zepto.min.js"></script>
-	<script type="text/javascript" src="js/Swipe.js"></script>
 	<script type="text/javascript" src="js/ParallaxScroll.js"></script>
 	<style>
 	body{
@@ -90,12 +89,6 @@ $('#draw').on('mousemove', function(e){
 	var dy = -oy - scroll.y;
 	scroll.move(dx, dy);
 });
-var swipe = new Swipe($('#draw'));
-swipe.onswipe = function(e){
-	e.preventDefault();
-	scroll.move(e.dx, e.dy);
-}
-
 
 
 </script>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Guestures</title>
+	<script type="text/javascript" src="js/zepto.min.js"></script>
+	<script type="text/javascript" src="js/Guesture.js"></script>
+	<style>
+	body{
+		margin: 0;
+		padding: 0;
+		font-family: arial;
+	}
+	a{text-decoration: none;}
+	</style>
+</head>
+<body>
+
+<h1 style="text-align: center;">Guestures</h1>
+
+<div id="draw" style="position: relative; margin: 0 auto; width: 100%;
+	; background: #eee; border: 2px solid #f00;">
+	<div id="layer" style="border: 1px solid #333;">
+		<img src="imgs/text-1.png" style="position: absolute;" />
+		<img src="imgs/text-2.png" style="position: absolute; top: 640px;" />
+		<img src="imgs/lupai-1.png" style="position: absolute; top: 180px; left: 300px;" />
+		<img src="imgs/lupai-2.png" style="position: absolute; top: 580px; left: 300px;" />
+		<img src="imgs/lupai-3.png" style="position: absolute; top: 880px; left: 300px;" />
+		<img src="imgs/lupai-4.png" style="position: absolute; top: 1280px; left: 200px;" />
+		<img src="imgs/car.png" style="position: absolute; top: 120px; left: 120px; border: 1px solid #00f;" />
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$('#draw').height($(window).height() * 0.6);
+$('#draw').width($('#draw').height() * 1.2);
+$('#draw').css('marginTop', 50);
+$('body').height(1500);
+
+var layer = $('#layer');
+layer.css({
+	height: 1500,
+	width: 500,
+	background: '#f7be4d',
+	position: 'absolute'
+});
+var guesture = new Guesture('#draw');
+guesture.onmove = function(e){
+	var x = parseFloat(layer.css('left')) || 0;
+	var y = parseFloat(layer.css('top')) || 0;
+	layer.css({
+		left: e.dx + x,
+		top: e.dy + y
+	});
+}
+</script>
+
+
+</body>
+</html>

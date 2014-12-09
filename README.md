@@ -7,6 +7,6 @@ Javascritp Parallax Scroll Widget
 
 * Parallax Scrolling support
 * Lazy load images, save lots of network traffic
-* Mobile browsers swipe supported(iOS)
+* Mobile browsers supported(iOS, Android)
 * Very low CPU usage
 * Easy to use

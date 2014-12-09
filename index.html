@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<title>Parallax Scroll Demo - BYD car</title>
 	<script type="text/javascript" src="js/zepto.min.js"></script>
-	<script type="text/javascript" src="js/Swipe.js"></script>
+	<script type="text/javascript" src="js/Guesture.js"></script>
 	<script type="text/javascript" src="js/ParallaxScroll.js"></script>
 	<style>
 	body{
@@ -161,9 +161,15 @@ function keyboard_handler(e){
 $(document).bind('keydown', keyboard_handler);
 
 
+/*
 var swipe = new Swipe($('#draw'));
 swipe.onswipe = function(e){
 	e.preventDefault();
+	scroll.move(e.dx, e.dy);
+}
+*/
+var guesture = new Guesture('#draw');
+guesture.onmove = function(e){
 	scroll.move(e.dx, e.dy);
 }
 

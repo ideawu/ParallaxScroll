@@ -150,7 +150,12 @@ function ParallaxScroll(dom, scale){
 			}
 			self.x += dx;
 			self.y += dy;
-			
+			self.dom.css({
+				left: self.x,
+				top: self.y
+			});
+
+			/*
 			var dist = Math.sqrt(dx * dx + dy * dy);
 			var dist2 = Math.sqrt(self.width * self.width + self.height * self.height);
 			var scroll_dist = Math.sqrt(self.scroll.width * self.scroll.width + self.scroll.height * self.scroll.height);
@@ -168,6 +173,7 @@ function ParallaxScroll(dom, scale){
 				left: self.x,
 				top: self.y
 			}, delay, 'ease');
+			*/
 		}
 		
 		self.layout = function(){
