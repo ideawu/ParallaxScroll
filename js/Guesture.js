@@ -40,11 +40,6 @@ var Guesture = function(dom){
 	}
 	
 	self.events = new FIFO(3);
-
-	self.listen = function(){
-		//self.dom.on('dragstart', function(e){e.preventDefault();});
-		self.dom.bind('mousedown touchstart', self.mousedown);
-	}
 	
 	function calc_delta(){
 		if(self.events.items.length < 2){
@@ -61,31 +56,100 @@ var Guesture = function(dom){
 		r.duration = e.time - s.time;
 		return r;
 	}
-	
-	var timer = null;
 
-	self.mousedown = function(e){
+	function Animation(){
+		var self = this;
+		var timer = null;
+		var method;
+		self._tick = null;
+		self.onend = null;
+		self.oncancel = null;
+
+		self.running = false;
+		
+		function Linear(steps){
+			var min = 1000 / 100;
+			var max = 1000 / 60;
+			var delta = (max - min) / steps;
+			var delay = min;
+			this.delay = function(){
+				if(steps -- <= 0){
+					return 0;
+				}
+				var r = delay;
+				delay += delta;
+				return Math.round(r);
+			}
+		}
+		
+		self.start = function(steps, tick){
+			self.stop();
+			self._tick = tick;
+			self.running = true;
+			method = new Linear(steps);
+			timer = setTimeout(fire_event, method.delay());
+		}
+			
+		self.stop = function(){
+			if(timer){
+				clearTimeout(timer);
+				timer = null;
+			}
+			self.running = false;
+		}
+		
+		self.cancel = function(){
+			self.stop();
+			if(self.oncancel){
+				self.oncancel();
+			}
+		}
+
+		function fire_event(){
+			var delay = method.delay();
+			if(delay == 0){
+				self.stop();
+				if(self.onend){
+					self.onend();
+				}
+				return;
+			}
+			if(self._tick){
+				self._tick();
+			}
+			timer = setTimeout(fire_event, delay);
+		}
+	}
+	
+	var event_bus = new Animation();
+	event_bus.onend = function(){
+		self.events.clear();
+		console.log('swipe end.');
+	}
+	event_bus.oncancel = function(){
+		self.events.clear();
+		console.log('swipe end(force).');
+	}
+
+	self._mousedown = function(e){
 		e.preventDefault();
-		if(timer){
-			console.log('swipe end(force end)');
-			clearTimeout(timer);
-			timer = null;
-			self.events.clear();
+		if(event_bus.running){
+			event_bus.cancel();
 		}
 		if(e.touches && e.touches.length > 1){
 			return;
 		}
 		var pos = get_pos(e);
 		self.events.push(pos);
-		self.dom.bind('mousemove touchmove', self.mousemove);
+		self.dom.bind('mousemove touchmove', self._mousemove);
 		self.dom.bind('mouseup mouseleave touchend touchcancel', function(e){
-			self.dom.unbind('mousemove touchmove', self.mousemove);
-			self.dom.unbind('mouseup mouseleave touchend');
-			self.mouseup(e);
+			self.dom.unbind('mousemove touchmove', self._mousemove);
+			self.dom.unbind('mouseup mouseleave touchend touchcancel');
+			self._mouseup(e);
 		});
 	}
 	
-	self.mousemove = function(e){
+	self._mousemove = function(e){
 		e.preventDefault();
 		var pos = get_pos(e);
 		self.events.push(pos);
@@ -96,18 +160,24 @@ var Guesture = function(dom){
 		}
 	}
 	
-	self.mouseup = function(e){
+	self._mouseup = function(e){
 		e.preventDefault();
 		var pos = get_pos(e);
 		//console.log('mouseup', JSON.stringify(self.events.items), pos);
 		var r = calc_delta();
 		if(r && self.onmove != null){
-			self.do_swipe(r);
+			var speed = Math.sqrt(r.dx*r.dx + r.dy*r.dy) / r.duration;
+			console.log('speed', speed);
+			if(speed > 0.2){
+				// swipe
+				self.do_swipe(r);
+			}else{
+				self.onmove(r);
+			}
 		}
 	}
-		
+
 	self.do_swipe = function(r){
-		// TODO: queuing swipe events
 		r.dx *= 3;
 		r.dy *= 3;
 		if(Math.abs(r.dx) < 1 && Math.abs(r.dy) < 1){
@@ -121,27 +191,19 @@ var Guesture = function(dom){
 		r.dx = dx;
 		r.dy = dy;
 
-		console.log('swipe begin', steps, distance);
+		console.log('swipe begin.', steps, distance);
+		event_bus.start(steps, function(){
+			self.onmove(r);
+		});
 		
-		var interval = 1000 / 60; // TOOD: 根据算法动态改变 interval
-		function fire_event(){
-			if(steps-- <= 0){
-				console.log('swipe end');
-				clearTimeout(timer);
-				timer = null;
-				self.events.clear();
-				return;
-			}
-			//console.log(steps, r);
-			if(self.onmove != null){
-				self.onmove(r);
-			}
-			timer = setTimeout(fire_event, interval);
-		}
-		timer = setTimeout(fire_event, interval);
 	}
 
-	self.listen();
+	self._listen = function(){
+		//self.dom.on('dragstart', function(e){e.preventDefault();});
+		self.dom.bind('mousedown touchstart', self._mousedown);
+	}
+
+	self._listen();
 }
 
 
