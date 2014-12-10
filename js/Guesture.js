@@ -91,7 +91,7 @@ var Guesture = function(dom){
 
 		function Easing(steps){
 			var min = 1000 / 1000;
-			var max = 1000 / 20;
+			var max = 1000 / 35;
 			var c = max - min;
 			var x = 0;
 			this.delay = function(){
@@ -99,8 +99,8 @@ var Guesture = function(dom){
 					return 0;
 				}
 				var t = x/steps;
-				//return c * t*t*t*t*t + min;
-				return -c/3 * (Math.cos(Math.PI*t) - 1) + min
+				return c * t*t*t*t*t + min;
+				//return -c/3 * (Math.cos(Math.PI*t) - 1) + min
 			}
 		}
 		
@@ -161,7 +161,7 @@ var Guesture = function(dom){
 		}
 		var distance = Math.round(Math.sqrt(r.dx * r.dx + r.dy * r.dy));
 		//var steps = !r.duration? 1 : Math.round(distance / r.duration * 15);
-		var steps = 50;
+		var steps = r.duration * 2;
 		r.dx = r.dx / steps;
 		r.dy = r.dy / steps;
 
