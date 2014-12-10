@@ -85,9 +85,8 @@ function ParallaxScroll(dom, scale){
 			var my = new_y - layer.y;
 			var new_x = layer.originX + dx_rate * (layer.width - self.width + layer.originX);
 			var mx = new_x - layer.x;
-			//mx = 0;
-			mx = Math.round(mx);
-			my = Math.round(my);
+			//mx = Math.round(mx);
+			//my = Math.round(my);
 			layer.move(mx, my);
 			//console.log('layer#' + i, layer.str(), ' move(' + mx + ',' + my + ')');
 		}
@@ -154,26 +153,6 @@ function ParallaxScroll(dom, scale){
 				left: self.x,
 				top: self.y
 			});
-
-			/*
-			var dist = Math.sqrt(dx * dx + dy * dy);
-			var dist2 = Math.sqrt(self.width * self.width + self.height * self.height);
-			var scroll_dist = Math.sqrt(self.scroll.width * self.scroll.width + self.scroll.height * self.scroll.height);
-			if(dist2 == 0){
-				var delay = 0;
-			}else{
-				var full_delay = 1100 * scroll_dist / 100;
-				//console.log(full_delay);
-				var delay = full_delay * dist / dist2 + 10;
-			}
-			//console.log(delay, self.width, self.height);
-
-			//self.dom.queue('fx', []).stop().animate({
-			self.dom.animate({
-				left: self.x,
-				top: self.y
-			}, delay, 'ease');
-			*/
 		}
 		
 		self.layout = function(){
@@ -184,9 +163,9 @@ function ParallaxScroll(dom, scale){
 				self.width = Math.max(self.width, sprite.x + sprite.width);
 				self.height = Math.max(self.height, sprite.y + sprite.height);
 			}
-			self.width = Math.round(self.width);
-			self.height = Math.round(self.height);
-			self.dom.height(self.height);
+			self.width = self.width;
+			self.height = self.height;
+			self.dom.height(Math.round(self.height));
 		}
 		
 		self.render = function(){
@@ -239,8 +218,8 @@ function ParallaxScroll(dom, scale){
 			
 			self.x = Math.round(self.x);
 			self.y = Math.round(self.y);
-			self.width = Math.round(self.width);
-			self.height = Math.round(self.height);
+			self.width = self.width;
+			self.height = self.height;
 			
 			if(self.html){
 				//console.log(self.html);
@@ -297,8 +276,6 @@ function ParallaxScroll(dom, scale){
 						height: self.height
 					});
 					self.render();
-					//self.layer.layout();
-					//self.layer.scroll.render();
 				});
 			}
 		}
@@ -313,17 +290,15 @@ function ParallaxScroll(dom, scale){
 		}
 		
 		self.show = function(){
-			//self.dom.queue('fx', []).delay(400).stop().animate({
-			self.dom.animate({
+			self.dom.css({
 				opacity: 1
-			}, 500);
+			});
 		}
 		
 		self.hide = function(){
-			//self.dom.queue('fx', []).delay(400).stop().animate({
-			self.dom.animate({
+			self.dom.css({
 				opacity: 0
-			}, 500);
+			});
 		}
 		
 		self.layout = function(width, height){

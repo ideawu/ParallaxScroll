@@ -66,19 +66,19 @@ var Guesture = function(dom){
 		self.oncancel = null;
 
 		self.running = false;
-		
-		function Linear(steps){
-			var min = 1000 / 100;
-			var max = 1000 / 50;
-			var delta = (max - min) / steps;
-			var delay = min;
+
+		function Quint(steps){
+			var min = 1000 / 200;
+			var max = 1000 / 20;
+			var c = max - min;
+			var x = 0;
 			this.delay = function(){
-				if(steps -- <= 0){
+				if(x++ > steps){
 					return 0;
 				}
-				var r = delay;
-				delay += delta;
-				return Math.round(r);
+				var t = x/steps;
+				var y = c * t*t*t*t*t + min;
+				return y;
 			}
 		}
 		
@@ -86,7 +86,7 @@ var Guesture = function(dom){
 			self.stop();
 			self._tick = tick;
 			self.running = true;
-			method = new Linear(steps);
+			method = new Quint(steps);
 			timer = setTimeout(fire_event, method.delay());
 		}
 			
@@ -129,6 +129,24 @@ var Guesture = function(dom){
 	event_bus.oncancel = function(){
 		self.events.clear();
 		console.log('swipe end(force).');
+	}
+
+	self.do_swipe = function(r){
+		r.dx *= 7;
+		r.dy *= 7;
+		if(Math.abs(r.dx) < 1 && Math.abs(r.dy) < 1){
+			return;
+		}
+		var distance = Math.round(Math.sqrt(r.dx * r.dx + r.dy * r.dy));
+		var steps = Math.round(r.duration / distance * 200);
+		r.dx = r.dx / steps;
+		r.dy = r.dy / steps;
+
+		console.log('swipe begin.', 'steps', steps, 'distance', distance, 'duration', r.duration);
+		event_bus.start(steps, function(){
+			self.onmove(r);
+		});
+		
 	}
 
 	self._mousedown = function(e){
@@ -175,27 +193,6 @@ var Guesture = function(dom){
 				self.onmove(r);
 			}
 		}
-	}
-
-	self.do_swipe = function(r){
-		r.dx *= 7;
-		r.dy *= 7;
-		if(Math.abs(r.dx) < 1 && Math.abs(r.dy) < 1){
-			return;
-		}
-		var distance = Math.sqrt(r.dx * r.dx + r.dy * r.dy);
-		var steps = r.duration;
-		var dx = r.dx / steps * (Math.abs(r.dx) / distance);
-		var dy = r.dy / steps * (Math.abs(r.dy) / distance);
-
-		r.dx = dx;
-		r.dy = dy;
-
-		console.log('swipe begin.', steps, distance);
-		event_bus.start(steps, function(){
-			self.onmove(r);
-		});
-		
 	}
 
 	self._listen = function(){
