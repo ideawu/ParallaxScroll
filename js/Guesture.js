@@ -154,8 +154,8 @@ var Guesture = function(dom){
 	}
 
 	self.do_swipe = function(r){
-		r.dx *= 1000 / r.duration / 6;
-		r.dy *= 1000 / r.duration / 6;
+		r.dx *= 1000 / r.duration / 3;
+		r.dy *= 1000 / r.duration / 3;
 		if(Math.abs(r.dx) < 1 && Math.abs(r.dy) < 1){
 			return;
 		}
