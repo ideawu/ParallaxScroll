@@ -161,7 +161,7 @@ var Guesture = function(dom){
 		}
 		var distance = Math.round(Math.sqrt(r.dx * r.dx + r.dy * r.dy));
 		//var steps = !r.duration? 1 : Math.round(distance / r.duration * 15);
-		var steps = 100;
+		var steps = 60;
 		r.dx = r.dx / steps;
 		r.dy = r.dy / steps;
 
