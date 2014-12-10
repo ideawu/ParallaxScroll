@@ -89,7 +89,7 @@ var Guesture = function(dom){
 
 		self.running = false;
 
-		function Quint(steps){
+		function Easing(steps){
 			var min = 1000 / 1000;
 			var max = 1000 / 20;
 			var c = max - min;
@@ -108,7 +108,7 @@ var Guesture = function(dom){
 			self.stop();
 			self._tick = tick;
 			self.running = true;
-			method = new Quint(steps);
+			method = new Easing(steps);
 			timer = setTimeout(fire_event, method.delay());
 		}
 			
