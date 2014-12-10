@@ -73,7 +73,7 @@ for(var i in layers){
 
 var scroll = new ParallaxScroll('#draw');
 scroll.load(layers);
-//scroll.move(-scroll.max_width/2, 0);
+scroll.move(-scroll.max_width/2, 0);
 console.log(scroll.scale, scroll.width, scroll.height, scroll.max_width);
 
 $('#draw').on('mousemove', function(e){
