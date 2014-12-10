@@ -3,9 +3,15 @@
  * @link: https://github.com/ideawu/ParallaxScroll
  */
 var Guesture = function(dom){
-	var s = this;
+	if(typeof dom == 'object' && dom.selector){
+		dom = dom[0];
+	}
+	if(typeof dom == 'string'){
+		dom = document.querySelector(dom);
+	}
+
 	var self = this;
-	self.dom = $(dom);
+	self.dom = dom;
 	self.onmove = null;
 	self.status = null;
 	self.event = {dx:0, dy:0, preventDefault: function(){}};
@@ -159,12 +165,14 @@ var Guesture = function(dom){
 		}
 		var pos = get_pos(e);
 		self.events.push(pos);
-		self.dom.bind('mousemove touchmove', self._mousemove);
-		self.dom.bind('mouseup mouseleave touchend touchcancel', function(e){
-			self.dom.unbind('mousemove touchmove', self._mousemove);
-			self.dom.unbind('mouseup mouseleave touchend touchcancel');
-			self._mouseup(e);
-		});
+		
+		self.dom.addEventListener('mousemove', self._mousemove, true);
+		self.dom.addEventListener('touchmove', self._mousemove, true);
+		
+		self.dom.addEventListener('mouseup', self._mouseup, true);
+		//self.dom.addEventListener('mouseleave', self._mouseup, true);
+		self.dom.addEventListener('touchend', self._mouseup, true);
+		self.dom.addEventListener('touchcancel', self._mouseup, true);
 	}
 	
 	self._mousemove = function(e){
@@ -180,8 +188,15 @@ var Guesture = function(dom){
 	
 	self._mouseup = function(e){
 		e.preventDefault();
-		var pos = get_pos(e);
-		//console.log('mouseup', JSON.stringify(self.events.items), pos);
+		self.dom.removeEventListener('mousemove', self._mousemove, true);
+		self.dom.removeEventListener('touchmove', self._mousemove, true);
+		
+		self.dom.removeEventListener('mouseup', self._mouseup, true);
+		//self.dom.removeEventListener('mouseleave', self._mouseup, true);
+		self.dom.removeEventListener('touchend', self._mouseup, true);
+		self.dom.removeEventListener('touchcancel', self._mouseup, true);
+
+		//console.log('mouseup', JSON.stringify(self.events.items), get_pos(e));
 		var r = calc_delta();
 		if(r && self.onmove != null){
 			var speed = Math.sqrt(r.dx*r.dx + r.dy*r.dy) / r.duration;
@@ -197,7 +212,8 @@ var Guesture = function(dom){
 
 	self._listen = function(){
 		//self.dom.on('dragstart', function(e){e.preventDefault();});
-		self.dom.bind('mousedown touchstart', self._mousedown);
+		self.dom.addEventListener('touchstart', self._mousedown, true);
+		self.dom.addEventListener('mousedown', self._mousedown, true);
 	}
 
 	self._listen();

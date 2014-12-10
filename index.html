@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>Parallax Scroll Demo - BYD car</title>
+	<title>Parallax Scroll Demo - car</title>
 	<script type="text/javascript" src="js/zepto.min.js"></script>
 	<script type="text/javascript" src="js/Guesture.js"></script>
 	<script type="text/javascript" src="js/ParallaxScroll.js"></script>
@@ -28,7 +28,7 @@
 var layers = [
 	{
 		width: 639,
-		height: 2980,
+		height: 5980,
 		css: {
 			backgroundColor: '#f7be4d'
 		},
@@ -84,25 +84,33 @@ var layers = [
 		   {
 				"img": "text-1.png",
 				"x": 86,
-				"y": 446
+				"y": 46
 			},
 			{
 				"img": "text-2.png",
 				"x": 86,
-				"y": 913
+				"y": 313
+			},
+			{
+				"img": "pic-3.png",
+				"x": 86,
+				"y": 613
 			},
 			{
 				"img": "btn_earn_hover.png",
 				"x": 210,
-				"y": 1413
+				"y": 1013
 			},
 			{
-				html: '<a href="https://lantouzi.com/" style="display:block;width:100%;height:100%">&nbsp;</a>',
+				html: '<a target="_blank" href="https://www.ideawu.com/" style="display:block;width:100%;height:100%;cursor:pointer;">&nbsp;</a>',
 				"x": 210,
-				"y": 1420,
+				"y": 1013,
 				width: 238,
 				height: 78
 			},
+			{
+				y: 1100
+			}
 		]
 	}
 ];
@@ -114,8 +122,7 @@ var layers = [
 
 $('#draw').height($(window).height() * 0.8);
 $('#draw').width($('#draw').height() * 0.7);
-$('#draw').css('marginTop', 50);
-$('body').height(1500);
+$('#draw').css('margin', '50px auto');
 
 layers[0].width += 100;
 layers[1].width += 100;
@@ -128,8 +135,10 @@ for(var i in layers){
 		if(layer.height){
 			//layer.height *= 3;
 		}
-		if(layer.children[j].img){
+		if(layer.children[j].y){
 			layer.children[j].y *= 3;
+		}
+		if(layer.children[j].img){
 			layer.children[j].img = './imgs/' + layer.children[j].img;
 		}
 	}
