@@ -90,8 +90,8 @@ var Guesture = function(dom){
 		self.running = false;
 
 		function Quint(steps){
-			var min = 1000 / 500;
-			var max = 1000 / 30;
+			var min = 1000 / 1000;
+			var max = 1000 / 20;
 			var c = max - min;
 			var x = 0;
 			this.delay = function(){
@@ -99,8 +99,8 @@ var Guesture = function(dom){
 					return 0;
 				}
 				var t = x/steps;
-				var y = c * t*t*t*t*t + min;
-				return y;
+				//return c * t*t*t*t*t + min;
+				return -c/3 * (Math.cos(Math.PI*t) - 1) + min
 			}
 		}
 		
@@ -154,14 +154,14 @@ var Guesture = function(dom){
 	}
 
 	self.do_swipe = function(r){
-		r.dx *= 1000 / r.duration / 3;
-		r.dy *= 1000 / r.duration / 3;
+		r.dx *= 1000 / r.duration / 4;
+		r.dy *= 1000 / r.duration / 4;
 		if(Math.abs(r.dx) < 1 && Math.abs(r.dy) < 1){
 			return;
 		}
 		var distance = Math.round(Math.sqrt(r.dx * r.dx + r.dy * r.dy));
 		//var steps = !r.duration? 1 : Math.round(distance / r.duration * 15);
-		var steps = 60;
+		var steps = 50;
 		r.dx = r.dx / steps;
 		r.dy = r.dy / steps;
 
