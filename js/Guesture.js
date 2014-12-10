@@ -3,6 +3,22 @@
  * @link: https://github.com/ideawu/ParallaxScroll
  */
 var Guesture = function(dom){
+	/*
+	var div = $('<div></div>');
+	div.css({
+		top: 20,
+		left: 0,
+		color: '#fff',
+		'position': 'absolute',
+		'background': '#333',
+		opacity: 0.5
+	});
+	$('body').append(div);
+	console.log = function(){
+		var args = Array.prototype.slice.call(arguments, 0);
+		div.prepend(args.join(' ') + '<br/>');
+	}
+	*/
 	if(typeof dom == 'object' && dom.selector){
 		dom = dom[0];
 	}
@@ -144,7 +160,8 @@ var Guesture = function(dom){
 			return;
 		}
 		var distance = Math.round(Math.sqrt(r.dx * r.dx + r.dy * r.dy));
-		var steps = Math.round(r.duration / distance * 200);
+		//var steps = !r.duration? 1 : Math.round(distance / r.duration * 15);
+		var steps = 60;
 		r.dx = r.dx / steps;
 		r.dy = r.dy / steps;
 
