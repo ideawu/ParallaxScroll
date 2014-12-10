@@ -39,8 +39,8 @@ function ParallaxScroll(dom, scale){
 		for(var i in self.layers){
 			var layer = self.layers[i];
 			layer.render();
-			self.max_width = Math.max(self.max_width, layer.width);
-			self.max_height = Math.max(self.max_height, layer.height);
+			self.max_width = Math.max(self.max_width, layer.width + layer.originX);
+			self.max_height = Math.max(self.max_height, layer.height + layer.originY);
 		}
 	}
 	
@@ -50,45 +50,45 @@ function ParallaxScroll(dom, scale){
 
 		var y = self.y + dy;
 		y = Math.min(y, 0);
-		y = Math.max(y, -self.height);
+		y = Math.max(y, -self.height)// * (1 - self.height/self.max_height));
 		dy = y - self.y;
 
 		var x = self.x + dx;
 		x = Math.min(x, 0);
-		x = Math.max(x, -self.width);
+		x = Math.max(x, -self.width)// * (1 - self.width/self.max_width));
 		dx = x - self.x;
 		
 		for(var i in self.layers){
 			var layer = self.layers[i];
 			if(layer.x == 0 && layer.x + layer.width == self.width){
-				dx = 0;
+				//dx = 0;
 			}
 			if(layer.y == 0 && layer.y + layer.height == self.height){
-				dy = 0;
+				//dy = 0;
 			}
 		}
 		if(!dx && !dy){
+			//console.log(dx, dy, self.x, self.y, self.height);
 			return;
 		}
 		
 		self.x += dx;
 		self.y += dy;
-		var dx_rate = self.x / self.width;
-		var dy_rate = self.y / self.height;
-				
+		//console.log('scroll', self.x, 'dx', dx);
+
+		var x_rate = (self.x / self.width);
+		var y_rate = (self.y / self.height);
 		for(var i in self.layers){
 			var layer = self.layers[i];
 			
-			// virtual height: self.height + layer.originY
-			var new_y = layer.originY + dy_rate * (layer.height - self.height + layer.originY);
-			//var new_y = dy_rate * (layer.height - layer.originY - self.height);
-			var my = new_y - layer.y;
-			var new_x = layer.originX + dx_rate * (layer.width - self.width + layer.originX);
-			var mx = new_x - layer.x;
-			//mx = Math.round(mx);
-			//my = Math.round(my);
-			layer.move(mx, my);
+			var nx = (layer.width + layer.originX - self.width) * x_rate;
+			var mx = nx - (layer.x - layer.originX);
+			
+			var ny = (layer.height + layer.originY - self.height) * y_rate;
+			var my = ny - (layer.y - layer.originY);
+			
 			//console.log('layer#' + i, layer.str(), ' move(' + mx + ',' + my + ')');
+			layer.move(mx, my);
 		}
 		self.render();
 	}
@@ -110,18 +110,22 @@ function ParallaxScroll(dom, scale){
 		}
 
 		self.load = function(conf){
-			self.x = (conf.x || 0) * ParallaxScroll.scale;
-			self.y = (conf.y || 0) * ParallaxScroll.scale;
-			self.width = (conf.width || 0) * ParallaxScroll.scale;
-			self.height = (conf.height || 0) * ParallaxScroll.scale;
+			self.x = Math.round((conf.x || 0) * ParallaxScroll.scale);
+			self.y = Math.round((conf.y || 0) * ParallaxScroll.scale);
+			self.width = Math.round((conf.width || 0) * ParallaxScroll.scale);
+			self.height = Math.round((conf.height || 0) * ParallaxScroll.scale);
 			self.originX = self.x;
 			self.originY = self.y;
 			self.originWidth = conf.width;
 
+			var x = Number.MAX_VALUE;
+			var y = Number.MAX_VALUE;
 			for(var i in conf.children){
 				var sprite = new Sprite();
 				sprite.load(conf.children[i]);
 				self.addSprite(sprite);
+				x = Math.min(x, sprite.x);
+				y = Math.min(y, sprite.y);
 			}
 			
 			self.layout();
@@ -281,6 +285,7 @@ function ParallaxScroll(dom, scale){
 		}
 		
 		self.visible = function(width, height){
+			return true;
 			var y = self.y + self.layer.y;
 			if(y + self.height < 0 - 20 || y > height + 20){
 				//console.log(self.img, self.y, self.height);

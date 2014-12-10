@@ -42,18 +42,18 @@ var layers = [
 	{
 		//height: 288,
 		width: 1100,
+		y: 50,
 		"children": [
 			{
-				y: 50,
 				"img": "2_hill.png"
 			}
 		]
 	},
 	{
 		width: 1136,
+		y: 80,
 		"children": [
 			{
-				y: 80,
 				"img": "3_wood.png"
 			}
 		]
@@ -73,22 +73,46 @@ for(var i in layers){
 
 var scroll = new ParallaxScroll('#draw');
 scroll.load(layers);
-scroll.move(-scroll.max_width/2, 0);
-console.log(scroll.scale, scroll.width, scroll.height);
+//scroll.move(-scroll.max_width/2, 0);
+console.log(scroll.scale, scroll.width, scroll.height, scroll.max_width);
 
 $('#draw').on('mousemove', function(e){
-	var ox = e.pageX - $('#draw').offset().left;
-	var oy = e.pageY - $('#draw').offset().top;
-	if(oy < scroll.height * 0.2){
-		oy = 0;
-	}
-	if(oy > scroll.height * 0.6){
-		oy = scroll.height * 0.6;
-	}
-	var dx = -ox - scroll.x;
-	var dy = -oy - scroll.y;
+	//return;
+	var ox = e.clientX - $('#draw').offset().left;
+	var oy = e.clientY - $('#draw').offset().top;
+	var dx = ((-ox - scroll.x) / scroll.width) * (scroll.max_width - scroll.width);
+	var dy = ((-oy - scroll.y) / scroll.height) * (scroll.max_height - scroll.height);
+	//console.log(dx, dy);
 	scroll.move(dx, dy);
 });
+
+
+
+function keyboard_handler(e){
+	var c = String.fromCharCode(e.which);
+	switch(c){
+		case '&': //up
+			scroll.move(0, +3);
+			if(e.preventDefault) e.preventDefault();
+			break;
+		case '(': //down
+			scroll.move(0, -3);
+			if(e.preventDefault) e.preventDefault();
+			break;
+		case '%': // left
+			scroll.move(-23, 0);
+			if(e.preventDefault) e.preventDefault();
+			break;
+		case ' ':
+		case '\'': // right
+			scroll.move(+23, 0);
+			if(e.preventDefault) e.preventDefault();
+			break;
+		default:
+			break;
+	}
+}
+$(document).bind('keydown', keyboard_handler);
 
 
 </script>
