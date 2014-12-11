@@ -67,8 +67,10 @@ var Guesture = function(dom){
 		if(self.events.items.length < 2){
 			return;
 		}
-		var s = self.events.items[self.events.items.length - 2];
-		var e = self.events.items[self.events.items.length - 1];
+		var es = self.events.items;
+		var len = es.length;
+		var s = es[len - 2];
+		var e = es[len - 1];
 		if(!s){
 			s = e;
 		}
@@ -91,7 +93,7 @@ var Guesture = function(dom){
 
 		function Easing(steps){
 			var min = 1000 / 1000;
-			var max = 1000 / 35;
+			var max = 1000 / 50;
 			var c = max - min;
 			var x = 0;
 			this.delay = function(){
@@ -100,7 +102,9 @@ var Guesture = function(dom){
 				}
 				var t = x/steps;
 				return c * t*t*t*t*t + min;
-				//return -c/3 * (Math.cos(Math.PI*t) - 1) + min
+				//return -c/6 * (Math.cos(Math.PI*t) - 1) + min
+				//console.log(-c * Math.cos(t * (Math.PI/2)) + c + min);
+				//return -c * Math.cos(t * (Math.PI/2)) + c + min;
 			}
 		}
 		
@@ -154,14 +158,18 @@ var Guesture = function(dom){
 	}
 
 	self.do_swipe = function(r){
-		r.dx *= 1000 / r.duration / 4;
-		r.dy *= 1000 / r.duration / 4;
-		if(Math.abs(r.dx) < 1 && Math.abs(r.dy) < 1){
+		var dist = Math.sqrt(r.dx*r.dx + r.dy*r.dy);
+		console.log(JSON.stringify(r), dist);
+		if(dist < 1){
 			return;
 		}
+		var speed = dist * r.duration;
+		r.dx *= Math.log(speed) + 2;
+		r.dy *= Math.log(speed) + 2;
+		
 		var distance = Math.round(Math.sqrt(r.dx * r.dx + r.dy * r.dy));
-		//var steps = !r.duration? 1 : Math.round(distance / r.duration * 15);
-		var steps = r.duration * 2;
+		//var steps = Math.round(7 * (1 + Math.log(distance)));
+		var steps = 60;
 		r.dx = r.dx / steps;
 		r.dy = r.dy / steps;
 

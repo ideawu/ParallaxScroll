@@ -31,13 +31,15 @@
 	</div>
 </div>
 
+<p id="debug" style="text-align: center;"></p>
+
 
 <script type="text/javascript">
 $('#draw').height($(window).height() * 0.8);
 $('#draw').width($(window).width() * 0.8);
 
-var layer = $('#layer');
-layer.css({
+var layer = {x: 0, y: 0};
+$('#layer').css({
 	height: 1500,
 	width: 500,
 	background: '#f7be4d',
@@ -45,12 +47,16 @@ layer.css({
 });
 var guesture = new Guesture('#draw');
 guesture.onmove = function(e){
-	var x = parseFloat(layer.css('left')) || 0;
-	var y = parseFloat(layer.css('top')) || 0;
-	layer.css({
-		left: e.dx + x,
-		top: e.dy + y
+	layer.x += e.dx;
+	layer.y += e.dy;
+	
+	$('#layer').css({
+		left: layer.x,
+		top: layer.y
 	});
+
+	var str = parseInt(layer.x) + ', ' + parseInt(layer.y);
+	$('#debug').html(str);
 }
 </script>
 
