@@ -116,11 +116,14 @@ $('#draw').bind('mousemove touchmove', function(e){
 		x = e.clientX;
 		y = e.clientY;
 	}
-	var ox = x - $('#draw').offset().left;
-	var oy = y - $('#draw').offset().top;
-	var dx = ((-ox - scroll.x) / scroll.width) * (scroll.max_width - scroll.width);
-	var dy = ((-oy - scroll.y) / scroll.height) * (scroll.max_height - scroll.height);
-	//console.log(dx, dy);
+	x -= $('#draw').offset().left;
+	y -= $('#draw').offset().top;
+	/*
+	var dx = ((-x - scroll.x) / scroll.width) * (scroll.max_width - scroll.width);
+	var dy = ((-y - scroll.y) / scroll.height) * (scroll.max_height - scroll.height);
+	*/
+	var dx = (x - scroll.width - scroll.x)/scroll.width * (scroll.max_width - scroll.width);
+	var dy = (y - scroll.height - scroll.y)/scroll.height * (scroll.max_height - scroll.height);
 	scroll.move(dx, dy);
 });
 $('#draw').on('touchstart', function(e){
