@@ -136,7 +136,7 @@ function ParallaxScroll(dom, scale){
 			
 			self.dom.css({
 				'z-index': 100,
-				position: 'absolute',
+				position: 'absolute'
 				//width: self.width,
 				//height: self.height
 			});
