@@ -84,18 +84,24 @@ var Guesture = function(dom){
 	function Animation(){
 		var self = this;
 		var timer = null;
-		var method;
 		self._tick = null;
 		self.onend = null;
 		self.oncancel = null;
 
 		self.running = false;
+		
+		var method = new Easing();
 
-		function Easing(steps){
+		function Easing(){
 			var min = 1000 / 1000;
 			var max = 1000 / 50;
 			var c = max - min;
 			var x = 0;
+			var steps = 1;
+			this.reset = function(s){
+				x = 0;
+				steps = s;
+			}
 			this.delay = function(){
 				if(x++ > steps){
 					return 0;
@@ -112,7 +118,7 @@ var Guesture = function(dom){
 			self.stop();
 			self._tick = tick;
 			self.running = true;
-			method = new Easing(steps);
+			method.reset(steps);
 			timer = setTimeout(fire_event, method.delay());
 		}
 			

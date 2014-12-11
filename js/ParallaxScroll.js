@@ -18,13 +18,17 @@ function ParallaxScroll(dom, scale){
 
 	self.layers = [];
 	
+	self.dom.css({
+		'z-index': 1000,
+		position: 'relative',
+		overflow: 'hidden'
+	});
 	if(ParallaxScroll.debug){
 		self.dom.css({
 			border: '3px solid #f00',
 			overflow: 'visible'
 		});
 	}
-	
 	self.load = function(confs){
 		for(var i in confs){
 			var layer = new Layer(self);
@@ -131,9 +135,10 @@ function ParallaxScroll(dom, scale){
 			self.layout();
 			
 			self.dom.css({
+				'z-index': 100,
 				position: 'absolute',
-				top: self.y,
-				left: self.x
+				//width: self.width,
+				//height: self.height
 			});
 			if(ParallaxScroll.debug){ // debug
 				self.dom.css({
@@ -145,21 +150,29 @@ function ParallaxScroll(dom, scale){
 			if(conf.css){
 				self.dom.css(conf.css);
 			}
+			self.move(0, 0);
 		}
 		
 		self.move = function(dx, dy){
-			if(dx == 0 && dy == 0){
-				return;
-			}
 			self.x += dx;
 			self.y += dy;
-			self.dom.css({
-				left: self.x,
-				top: self.y
-			});
+			if(0){
+				self.dom.css({
+					left: self.x,
+					top: self.y
+				});
+			}else{
+				// better performace
+				self.dom.css({
+					'-webkit-transform': 'translate3d(' + self.x + 'px, ' + self.y + 'px, 0)',
+					'transform': 'translate3d(' + self.x + 'px, ' + self.y + 'px, 0)'
+				});
+			}
 		}
 		
 		self.layout = function(){
+			var old_w = self.wiidth;
+			var old_h = self.height;
 			for(var i in self.sprites){
 				var sprite = self.sprites[i];
 				sprite.layout(self.scroll.width, self.scroll.height);
@@ -167,20 +180,25 @@ function ParallaxScroll(dom, scale){
 				self.width = Math.max(self.width, sprite.x + sprite.width);
 				self.height = Math.max(self.height, sprite.y + sprite.height);
 			}
-			self.width = self.width;
-			self.height = self.height;
-			self.dom.height(Math.round(self.height));
+			if(old_w != self.width){
+				//self.dom.width(Math.round(self.width));
+				//console.log('refresh width', old_w, self.width);
+			}
+			if(old_h != self.height){
+				//self.dom.height(Math.round(self.height));
+				//console.log('refresh height', old_h, self.height);
+			}
 		}
 		
 		self.render = function(){
 			self.layout();
-			if(self.originWidth){
-				self.dom.width(self.width);
-			}
+			//if(self.originWidth){
+			//	self.dom.width(self.width);
+			//}
 			
 			for(var i in self.sprites){
 				var sprite = self.sprites[i];
-				sprite.render(self.scroll.width, self.scroll.height);
+				sprite.render();
 			}
 		}
 	}
@@ -230,11 +248,9 @@ function ParallaxScroll(dom, scale){
 				//console.log($(self.html).width(), $(self.html).height());
 				self.dom.append($(self.html));
 			}
-			if(self.img){
-				self.dom.css('backgroundImage', 'url(' + self.img + ')');
-			}
 			
 			self.dom.css({
+				'z-index': 10,
 				position: 'absolute',
 				overflow: 'hidden',
 				width: self.width,
@@ -274,23 +290,29 @@ function ParallaxScroll(dom, scale){
 					//console.log(img.width, img.height, img.src);
 					self.dom.css({
 						opacity: 0,
-						//backgroundImage: 'url(' + img.src + ')',
+						backgroundImage: 'url(' + img.src + ')',
 						backgroundSize: self.width + 'px ' + self.height + 'px',
 						width: self.width,
 						height: self.height
 					});
-					self.render();
+					self.layer.render();
+					//self.render();
 				});
 			}
 		}
 		
-		self.visible = function(width, height){
-			return true;
+		self.visible = function(){
+			var width = self.layer.scroll.width;
+			var height = self.layer.scroll.height;
 			var y = self.y + self.layer.y;
 			if(y + self.height < 0 - 20 || y > height + 20){
-				//console.log(self.img, self.y, self.height);
 				return false;
 			}
+			var x = self.x + self.layer.x;
+			if(x + self.width < 0 - 20 || x > width + 20){
+				return false;
+			}
+			//console.log(self.img, self.y, self.layer.y, height);
 			return true;
 		}
 		
@@ -307,26 +329,31 @@ function ParallaxScroll(dom, scale){
 		}
 		
 		self.layout = function(width, height){
-			if(!self.visible(self.layer.scroll.width, self.layer.scroll.height)){
+			if(!self.visible()){
 				return;
 			}
 			self.load_image();
 		}
 		
-		self.render = function(width, height){
+		self.render = function(){
+			// 要在 layout 之后执行
 			if(self.stickWidth){
 				self.width = self.layer.width;
 			}
 			if(self.stickHeight){
 				self.height = self.layer.height;
 			}
-			self.dom.css({
-				top: self.y,
-				left: self.x,
-				width: self.width,
-				height: self.height
-			});
-			if(self.visible(self.layer.scroll.width, self.layer.scroll.height)){
+			if(self.visible()){
+				if(self.stickWidth){
+					self.dom.css('width', self.width);
+				}
+				if(self.stickHeight){
+					self.dom.css('height', self.height);
+				}
+				self.dom.css({
+					top: self.y,
+					left: self.x
+				});
 				self.show();
 			}else{
 				self.hide();
