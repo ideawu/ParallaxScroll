@@ -187,7 +187,9 @@ var Guesture = function(dom){
 	}
 
 	self._mousedown = function(e){
-		//e.preventDefault();
+		if(!e.touches){
+			e.preventDefault();
+		}
 		if(event_bus.running){
 			event_bus.cancel();
 		}
@@ -218,7 +220,9 @@ var Guesture = function(dom){
 	}
 	
 	self._mouseup = function(e){
-		//e.preventDefault();
+		if(!e.touches){
+			e.preventDefault();
+		}
 		self.dom.removeEventListener('mousemove', self._mousemove, true);
 		self.dom.removeEventListener('touchmove', self._mousemove, true);
 		
