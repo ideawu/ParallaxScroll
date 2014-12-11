@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>JavaScript Swipe Event</title>
+	<title>JavaScript Swipe Guesture</title>
 	<script type="text/javascript" src="js/zepto.min.js"></script>
 	<script type="text/javascript" src="js/Guesture.js"></script>
 	<style>
@@ -12,14 +12,28 @@
 		font-family: arial;
 	}
 	a{text-decoration: none;}
+	#draw{
+		border: 2px solid #aaa;
+		background: #fff;
+		-moz-border-radius: 8px;
+		border-radius: 8px;
+		-moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+		box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+	}
+	#footer{
+		text-align: center;
+		padding: 10px;
+	}
 	</style>
 </head>
 <body>
 
-<h1 style="text-align: center;">JavaScript Swipe Event</h1>
+<h1 style="text-align: center;">JavaScript Swipe Guesture</h1>
+
+<p style="text-align: center;">Drag and swipe the color block in the rect</p>
 
 <div id="draw" style="position: relative; margin: 0 auto; width: 100%;
-	overflow: hidden; background: #eee; border: 2px solid #f00;">
+	overflow: hidden;">
 	<div id="layer" style="border: 1px solid #333;">
 		<img src="imgs/text-1.png" style="position: absolute;" />
 		<img src="imgs/text-2.png" style="position: absolute; top: 640px;" />
@@ -33,9 +47,22 @@
 
 <p id="debug" style="text-align: center;"></p>
 
+<p style="text-align: center;">
+	<a href="index.html">index.html</a>
+	|
+	<a href="mountain.html">mountain.html</a>
+	|
+	<a href="guesture.html">guesture.html</a>
+</p>
+
+<div id="footer">
+	Copyright &copy; 2014 <a href="http://www.ideawu.net/">ideawu.net</a>.
+	<a href="https://github.com/ideawu/ParallaxScroll" target="_blank">Github</a>
+</div>
+
 
 <script type="text/javascript">
-$('#draw').height($(window).height() * 0.8);
+$('#draw').height($(window).height() - 240);
 $('#draw').width($(window).width() * 0.8);
 
 var layer = {x: 0, y: 0};

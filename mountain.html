@@ -12,17 +12,43 @@
 		font-family: arial;
 	}
 	a{text-decoration: none;}
+	#draw{
+		border: 2px solid #aaa;
+		background: #fff;
+		-moz-border-radius: 8px;
+		border-radius: 8px;
+		-moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+		box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+	}
+	#footer{
+		text-align: center;
+		padding: 10px;
+	}
 	</style>
 </head>
 <body>
 
 <h1 style="text-align: center;">Parallax Scroll Demo - moutain view</h1>
 
-<div id="draw" style="position: relative; margin: 50px auto; width: 640px; height: 240px;
-	overflow: hidden; background: #eee;">
+<div id="draw" style="position: relative; margin: 50px auto; width: 640px; height: 260px;
+	overflow: hidden;">
 </div>
 
-<p style="text-align: center;">images stolen from <a href="http://stephband.info/jparallax/">http://stephband.info/jparallax/</a></p>
+<p style="text-align: center;">images stolen from <a href="http://stephband.info/jparallax/" target="_blank">http://stephband.info/jparallax/</a></p>
+
+<p style="text-align: center;">
+	<a href="index.html">index.html</a>
+	|
+	<a href="mountain.html">mountain.html</a>
+	|
+	<a href="guesture.html">guesture.html</a>
+</p>
+
+
+<div id="footer">
+	Copyright &copy; 2014 <a href="http://www.ideawu.net/">ideawu.net</a>.
+	<a href="https://github.com/ideawu/ParallaxScroll" target="_blank">Github</a>
+</div>
 
 
 <script type="text/javascript">
@@ -76,16 +102,26 @@ scroll.load(layers);
 scroll.move(-scroll.max_width/2, 0);
 console.log(scroll.scale, scroll.width, scroll.height, scroll.max_width);
 
-$('#draw').on('mousemove', function(e){
-	//return;
-	var ox = e.clientX - $('#draw').offset().left;
-	var oy = e.clientY - $('#draw').offset().top;
+$('#draw').bind('mousemove touchmove', function(e){
+	var x = 0;
+	var y = 0;
+	if(e.targetTouches && e.targetTouches.length > 0) {
+		x = e.targetTouches[0].clientX;
+		y = e.targetTouches[0].clientY;
+	} else {
+		x = e.clientX;
+		y = e.clientY;
+	}
+	var ox = x - $('#draw').offset().left;
+	var oy = y - $('#draw').offset().top;
 	var dx = ((-ox - scroll.x) / scroll.width) * (scroll.max_width - scroll.width);
 	var dy = ((-oy - scroll.y) / scroll.height) * (scroll.max_height - scroll.height);
 	//console.log(dx, dy);
 	scroll.move(dx, dy);
 });
-
+$('#draw').on('touchstart', function(e){
+	e.preventDefault();
+});
 
 
 function keyboard_handler(e){

@@ -159,11 +159,11 @@ var Guesture = function(dom){
 
 	self.do_swipe = function(r){
 		var dist = Math.sqrt(r.dx*r.dx + r.dy*r.dy);
-		console.log(JSON.stringify(r), dist);
+		//console.log(JSON.stringify(r), dist);
 		if(dist < 1){
 			return;
 		}
-		var speed = dist * r.duration;
+		var speed = dist * r.duration || 1;
 		r.dx *= Math.log(speed) + 2;
 		r.dy *= Math.log(speed) + 2;
 		
@@ -225,7 +225,7 @@ var Guesture = function(dom){
 		var r = calc_delta();
 		if(r && self.onmove != null){
 			var speed = Math.sqrt(r.dx*r.dx + r.dy*r.dy) / r.duration;
-			console.log('speed', speed);
+			//console.log('speed', speed);
 			if(speed > 0.4){
 				// swipe
 				self.do_swipe(r);
