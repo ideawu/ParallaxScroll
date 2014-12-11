@@ -1,7 +1,7 @@
 Parallax Scrolling
 ==============
 
-Javascritp Parallax Scrolling Widget, Swipe guesture event recognizer.
+JavaScritp Parallax Scrolling widget, Swipe guesture event recognizer.
 
 # Features
 
