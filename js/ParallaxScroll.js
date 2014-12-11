@@ -323,9 +323,12 @@ function ParallaxScroll(dom, scale){
 		}
 		
 		self.hide = function(){
+			return;
+			/*
 			self.dom.css({
 				opacity: 0
 			});
+			*/
 		}
 		
 		self.layout = function(width, height){
