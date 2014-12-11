@@ -14,5 +14,5 @@ JavaScritp Parallax Scrolling widget, Swipe guesture event recognizer.
 # Demos
 
 * [Swipe + Parallax Scrolling](http://www.ideawu.net/person/ParallaxScroll/index.html)
-* [Swipe](http://www.ideawu.net/person/ParallaxScroll/guesture.html)
+* [Swipe](http://www.ideawu.net/person/ParallaxScroll/swipe.html)
 * [Parallax Scrolling](http://www.ideawu.net/person/ParallaxScroll/mountain.html)
