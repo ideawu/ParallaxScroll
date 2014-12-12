@@ -243,12 +243,6 @@ function ParallaxScroll(dom, scale){
 			self.width = self.width;
 			self.height = self.height;
 			
-			if(self.html){
-				//console.log(self.html);
-				//console.log($(self.html).width(), $(self.html).height());
-				self.dom.append($(self.html));
-			}
-			
 			self.dom.css({
 				'z-index': 10,
 				position: 'absolute',
@@ -258,10 +252,6 @@ function ParallaxScroll(dom, scale){
 				top: self.y,
 				left: self.x
 			});
-			if(self.css){
-				//console.log(JSON.stringify(self.css));
-				self.dom.css(self.css);
-			}
 		}
 
 		function load_image(url, callback){
@@ -272,13 +262,20 @@ function ParallaxScroll(dom, scale){
 			ni.src = url;
 		}
 		
-		self.img_inited = false;
+		self.inited = false;
 		
 		self.load_image = function(){
-			if(self.img_inited){
+			if(self.inited){
 				return;
 			}
-			self.img_inited = true;
+			self.inited = true;
+
+			if(self.html){
+				self.dom.append($(self.html));
+			}
+			if(self.css){
+				self.dom.css(self.css);
+			}
 			
 			if(self.img){
 				var url = self.img;
@@ -296,7 +293,6 @@ function ParallaxScroll(dom, scale){
 						height: self.height
 					});
 					self.layer.render();
-					//self.render();
 				});
 			}
 		}
@@ -353,10 +349,6 @@ function ParallaxScroll(dom, scale){
 				if(self.stickHeight){
 					self.dom.css('height', self.height);
 				}
-				self.dom.css({
-					top: self.y,
-					left: self.x
-				});
 				self.show();
 			}else{
 				self.hide();
