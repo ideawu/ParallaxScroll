@@ -75,7 +75,13 @@ $('#layer').css({
 	background: '#f7be4d',
 	position: 'absolute'
 });
+
+
 var guesture = new Guesture('#draw');
+guesture.onswipe = function(e){
+	// furthur move events are ignored
+	//e.preventDefault();
+}
 guesture.onmove = function(e){
 	layer.x += e.dx;
 	layer.y += e.dy;
@@ -85,7 +91,7 @@ guesture.onmove = function(e){
 		top: layer.y
 	});
 
-	var str = parseInt(layer.x) + ', ' + parseInt(layer.y);
+	var str = e.type + ': ' + parseInt(layer.x) + ', ' + parseInt(layer.y);
 	$('#debug').html(str);
 }
 </script>

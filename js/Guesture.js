@@ -28,9 +28,9 @@ var Guesture = function(dom){
 
 	var self = this;
 	self.dom = dom;
+	
 	self.onmove = null;
-	self.status = null;
-	self.event = {dx:0, dy:0, preventDefault: function(){}};
+	self.onswipe = null;
 	
 	function FIFO(capacity){
 		var self = this;
@@ -75,6 +75,7 @@ var Guesture = function(dom){
 			s = e;
 		}
 		var r = {};
+		r.type = 'move';
 		r.dx = e.x - s.x;
 		r.dy = e.y - s.y;
 		r.duration = e.time - s.time;
@@ -160,7 +161,18 @@ var Guesture = function(dom){
 	}
 	event_bus.oncancel = function(){
 		self.events.clear();
-		console.log('swipe end(force).');
+		console.log('swipe end(abort).');
+	}
+	
+	function SwipeEvent(dx, dy, duration){
+		this.type = 'swipe';
+		this.dx = dx;
+		this.dy = dy;
+		this.duration = duration;
+		this._preventDefault = false;
+		this.preventDefault = function(){
+			this._preventDefault = true;
+		}
 	}
 
 	self.do_swipe = function(r){
@@ -172,14 +184,23 @@ var Guesture = function(dom){
 		var speed = dist * r.duration || 1;
 		r.dx *= Math.log(speed) + 2;
 		r.dy *= Math.log(speed) + 2;
-		
+		r.type = 'swipe';
+
 		var distance = Math.round(Math.sqrt(r.dx * r.dx + r.dy * r.dy));
 		//var steps = Math.round(7 * (1 + Math.log(distance)));
 		var steps = 60;
-		r.dx = r.dx / steps;
-		r.dy = r.dy / steps;
 
 		console.log('swipe begin.', 'steps', steps, 'distance', distance, 'duration', r.duration);
+		if(self.onswipe){
+			var sr = new SwipeEvent(r.dx, r.dy, r.duration);
+			self.onswipe(sr);
+			if(sr._preventDefault){
+				return;
+			}
+		}
+		
+		r.dx = r.dx / steps;
+		r.dy = r.dy / steps;
 		event_bus.start(steps, function(){
 			self.onmove(r);
 		});
