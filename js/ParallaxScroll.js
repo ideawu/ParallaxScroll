@@ -62,15 +62,6 @@ function ParallaxScroll(dom, scale){
 		x = Math.max(x, -self.width)// * (1 - self.width/self.max_width));
 		dx = x - self.x;
 		
-		for(var i in self.layers){
-			var layer = self.layers[i];
-			if(layer.x == 0 && layer.x + layer.width == self.width){
-				//dx = 0;
-			}
-			if(layer.y == 0 && layer.y + layer.height == self.height){
-				//dy = 0;
-			}
-		}
 		if(!dx && !dy){
 			//console.log(dx, dy, self.x, self.y, self.height);
 			return;
@@ -122,17 +113,11 @@ function ParallaxScroll(dom, scale){
 			self.originY = self.y;
 			self.originWidth = conf.width;
 
-			var x = Number.MAX_VALUE;
-			var y = Number.MAX_VALUE;
 			for(var i in conf.children){
 				var sprite = new Sprite();
 				sprite.load(conf.children[i]);
 				self.addSprite(sprite);
-				x = Math.min(x, sprite.x);
-				y = Math.min(y, sprite.y);
 			}
-			
-			self.layout();
 			
 			self.dom.css({
 				'z-index': 100,
@@ -150,6 +135,7 @@ function ParallaxScroll(dom, scale){
 			if(conf.css){
 				self.dom.css(conf.css);
 			}
+			self.layout();
 			self.move(0, 0);
 		}
 		
@@ -191,11 +177,7 @@ function ParallaxScroll(dom, scale){
 		}
 		
 		self.render = function(){
-			self.layout();
-			//if(self.originWidth){
-			//	self.dom.width(self.width);
-			//}
-			
+			self.layout();			
 			for(var i in self.sprites){
 				var sprite = self.sprites[i];
 				sprite.render();
@@ -296,7 +278,7 @@ function ParallaxScroll(dom, scale){
 				});
 			}
 		}
-		
+
 		self.visible = function(){
 			var width = self.layer.scroll.width;
 			var height = self.layer.scroll.height;
